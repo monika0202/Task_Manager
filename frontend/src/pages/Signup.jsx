@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 
 import API from "../api/axios";
 
+import "./signup.css";
+
 function Signup() {
 
   const navigate = useNavigate();
@@ -52,48 +54,66 @@ function Signup() {
 
   return (
 
-    <div className="flex items-center justify-center h-screen">
+    <div className="signup-container">
 
-      <form
-        onSubmit={handleSubmit}
-        className="border p-6 rounded w-80"
-      >
+      <div className="signup-card">
 
-        <h1 className="text-2xl font-bold mb-4">
-          Signup
+        {/* GIF */}
+        <div className="gif-container">
+
+          <iframe
+            src="https://tenor.com/embed/5834748043498907593"
+            className="signup-gif"
+            allowFullScreen
+          ></iframe>
+
+        </div>
+
+
+        {/* TITLE */}
+        <h1 className="signup-title">
+          Create Account ✨
         </h1>
 
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          className="border w-full p-2 mb-3"
-          onChange={handleChange}
-        />
+        <p className="signup-subtitle">
+          Signup to manage your tasks
+        </p>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          className="border w-full p-2 mb-3"
-          onChange={handleChange}
-        />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="border w-full p-2 mb-3"
-          onChange={handleChange}
-        />
+        {/* FORM */}
+        <form onSubmit={handleSubmit}>
 
-        <button
-          className="bg-green-500 text-white w-full p-2 rounded"
-        >
-          Signup
-        </button>
+          <input
+            type="text"
+            name="name"
+            placeholder="Enter your name"
+            className="signup-input"
+            onChange={handleChange}
+          />
 
-      </form>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            className="signup-input"
+            onChange={handleChange}
+          />
+
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter your password"
+            className="signup-input"
+            onChange={handleChange}
+          />
+
+          <button className="signup-btn">
+            Signup
+          </button>
+
+        </form>
+
+      </div>
 
     </div>
   );

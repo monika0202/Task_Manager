@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 
 import API from "../api/axios";
 
+
+import "./login.css";
+
 function Login() {
 
   const navigate = useNavigate();
@@ -57,40 +60,56 @@ function Login() {
 
   return (
 
-    <div className="flex items-center justify-center h-screen">
+    <div className="login-container">
 
-      <form
-        onSubmit={handleSubmit}
-        className="border p-6 rounded w-80"
-      >
+      <div className="login-card">
 
-        <h1 className="text-2xl font-bold mb-4">
-          Login
+       <div className="gif-container">
+
+  <iframe
+    src="https://tenor.com/embed/5834748043498907593"
+    className="login-gif"
+    allowFullScreen
+  ></iframe>
+
+</div>
+
+        {/* HEADING */}
+        <h1 className="login-title">
+          Welcome Back 👋
         </h1>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          className="border w-full p-2 mb-3"
-          onChange={handleChange}
-        />
+        <p className="login-subtitle">
+          Login to manage your tasks
+        </p>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="border w-full p-2 mb-3"
-          onChange={handleChange}
-        />
 
-        <button
-          className="bg-blue-500 text-white w-full p-2 rounded"
-        >
-          Login
-        </button>
+        {/* FORM */}
+        <form onSubmit={handleSubmit}>
 
-      </form>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            className="login-input"
+            onChange={handleChange}
+          />
+
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter your password"
+            className="login-input"
+            onChange={handleChange}
+          />
+
+          <button className="login-btn">
+            Login
+          </button>
+
+        </form>
+
+      </div>
 
     </div>
   );
