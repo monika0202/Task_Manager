@@ -12,10 +12,11 @@
 
   background:
     linear-gradient(
-      135deg,
-      #10b981,
-      #2563eb,
-      #8b5cf6
+       135deg,
+       #06b6d4,
+       #2563eb
+      
+     
     );
 }
 
@@ -60,7 +61,7 @@
   border-radius: 16px;
 }
 
-/* TITLE */
+
 .signup-title {
 
   font-size: 32px;
@@ -72,7 +73,7 @@
   margin-bottom: 8px;
 }
 
-/* SUBTITLE */
+
 .signup-subtitle {
 
   color: #6b7280;
@@ -80,7 +81,7 @@
   margin-bottom: 25px;
 }
 
-/* INPUT */
+
 .signup-input {
 
   width: 100%;
@@ -109,7 +110,7 @@
     rgba(16, 185, 129, 0.15);
 }
 
-/* BUTTON */
+
 .signup-btn {
 
   width: 100%;
@@ -147,7 +148,7 @@
     rgba(16, 185, 129, 0.3);
 }
 
-/* ANIMATION */
+
 @keyframes fadeIn {
 
   from {

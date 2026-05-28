@@ -74,9 +74,9 @@ function Login() {
 
 </div>
 
-        {/* HEADING */}
+  
         <h1 className="login-title">
-          Welcome Back 👋
+          Welcome Back
         </h1>
 
         <p className="login-subtitle">
@@ -84,7 +84,7 @@ function Login() {
         </p>
 
 
-        {/* FORM */}
+
         <form onSubmit={handleSubmit}>
 
           <input

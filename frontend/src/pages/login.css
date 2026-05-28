@@ -1,4 +1,4 @@
-/* PAGE */
+
 .login-container {
 
   height: 100vh;
@@ -12,13 +12,12 @@
   background:
     linear-gradient(
       135deg,
-      #2563eb,
-      #8b5cf6,
-      #06b6d4
+       #06b6d4,
+       #2563eb
     );
 }
 
-/* CARD */
+
 .login-card {
 
   width: 360px;
@@ -38,7 +37,7 @@
   animation: fadeIn 0.5s ease;
 }
 
-/* GIF */
+
 .login-gif {
 
   width: 130px;
@@ -50,7 +49,7 @@
   margin-bottom: 15px;
 }
 
-/* TITLE */
+
 .login-title {
 
   font-size: 30px;
@@ -62,7 +61,7 @@
   margin-bottom: 8px;
 }
 
-/* SUBTITLE */
+
 .login-subtitle {
 
   color: #6b7280;
@@ -70,7 +69,7 @@
   margin-bottom: 25px;
 }
 
-/* INPUT */
+
 .login-input {
 
   width: 100%;
@@ -99,7 +98,7 @@
     rgba(37, 99, 235, 0.15);
 }
 
-/* BUTTON */
+
 .login-btn {
 
   width: 100%;
@@ -113,8 +112,8 @@
   background:
     linear-gradient(
       90deg,
-      #2563eb,
-      #8b5cf6
+       #10b981,
+      #2563eb
     );
 
   color: white;
@@ -150,7 +149,7 @@
   border-radius: 16px;
 }
 
-/* ANIMATION */
+
 @keyframes fadeIn {
 
   from {

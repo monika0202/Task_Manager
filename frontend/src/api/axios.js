@@ -8,7 +8,6 @@ const API = axios.create({
 });
 
 
-// attach token automatically
 API.interceptors.request.use((req) => {
 
   const token =

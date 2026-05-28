@@ -10,44 +10,142 @@ function Signup() {
 
   const navigate = useNavigate();
 
-  const [formData, setFormData] =
-    useState({
-
-      name: "",
-      email: "",
-      password: ""
-    });
 
 
-  const handleChange = (e) => {
+  const [name, setName] =
+    useState("");
 
-    setFormData({
+  const [email, setEmail] =
+    useState("");
 
-      ...formData,
+  const [password, setPassword] =
+    useState("");
 
-      [e.target.name]: e.target.value
-    });
+  const [confirmPassword,
+    setConfirmPassword] =
+    useState("");
+
+  const [error, setError] =
+    useState("");
+
+  const [success, setSuccess] =
+    useState("");
+
+
+  
+  const validateEmail = (email) => {
+
+    return /\S+@\S+\.\S+/
+      .test(email);
   };
 
 
-  const handleSubmit = async (e) => {
+ 
+  const handleSubmit =
+    async (e) => {
 
     e.preventDefault();
+
+    setError("");
+    setSuccess("");
+
+
+
+    if (!name.trim()) {
+
+      setError(
+        "Name is required"
+      );
+
+      return;
+    }
+
+
+
+    if (!email.trim()) {
+
+      setError(
+        "Email is required"
+      );
+
+      return;
+    }
+
+    if (!validateEmail(email)) {
+
+      setError(
+        "Enter a valid email"
+      );
+
+      return;
+    }
+
+
+  
+    if (!password) {
+
+      setError(
+        "Password is required"
+      );
+
+      return;
+    }
+
+    if (password.length < 6) {
+
+      setError(
+        "Password must be at least 6 characters"
+      );
+
+      return;
+    }
+
+
+
+    if (
+      password !==
+      confirmPassword
+    ) {
+
+      setError(
+        "Passwords do not match"
+      );
+
+      return;
+    }
+
 
     try {
 
       await API.post(
         "/auth/signup",
-        formData
+        {
+          name,
+          email,
+          password
+        }
       );
 
-      alert("Signup Successful");
+      setSuccess(
+        "Signup successful!"
+      );
 
-      navigate("/");
+
+    
+      setTimeout(() => {
+
+        navigate("/");
+
+      }, 1500);
 
     } catch (error) {
 
-      alert(error.response.data.message);
+      setError(
+
+        error.response?.data?.message ||
+
+        "Signup failed"
+      );
     }
   };
 
@@ -58,7 +156,6 @@ function Signup() {
 
       <div className="signup-card">
 
-        {/* GIF */}
         <div className="gif-container">
 
           <iframe
@@ -70,9 +167,9 @@ function Signup() {
         </div>
 
 
-        {/* TITLE */}
+   
         <h1 className="signup-title">
-          Create Account ✨
+          Create Account
         </h1>
 
         <p className="signup-subtitle">
@@ -80,34 +177,81 @@ function Signup() {
         </p>
 
 
-        {/* FORM */}
+  
+        {error && (
+
+          <p className="error-text">
+            {error}
+          </p>
+        )}
+
+
+     
+        {success && (
+
+          <p className="success-text">
+            {success}
+          </p>
+        )}
+
+
+   
         <form onSubmit={handleSubmit}>
 
+ 
           <input
             type="text"
-            name="name"
             placeholder="Enter your name"
             className="signup-input"
-            onChange={handleChange}
+            value={name}
+            onChange={(e) =>
+              setName(e.target.value)
+            }
           />
 
+
+       
           <input
             type="email"
-            name="email"
             placeholder="Enter your email"
             className="signup-input"
-            onChange={handleChange}
+            value={email}
+            onChange={(e) =>
+              setEmail(e.target.value)
+            }
           />
 
+
+ 
           <input
             type="password"
-            name="password"
             placeholder="Enter your password"
             className="signup-input"
-            onChange={handleChange}
+            value={password}
+            onChange={(e) =>
+              setPassword(e.target.value)
+            }
           />
 
-          <button className="signup-btn">
+
+       
+          <input
+            type="password"
+            placeholder="Confirm password"
+            className="signup-input"
+            value={confirmPassword}
+            onChange={(e) =>
+              setConfirmPassword(
+                e.target.value
+              )
+            }
+          />
+
+
+        
+          <button
+            className="signup-btn"
+          >
             Signup
           </button>
 

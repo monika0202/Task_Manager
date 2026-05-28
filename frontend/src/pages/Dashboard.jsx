@@ -3,430 +3,234 @@ import API from "../api/axios";
 import "../index.css";
 
 function Dashboard() {
-
   const [tasks, setTasks] = useState([]);
-
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [filter, setFilter] = useState("All");
+  const [darkMode, setDarkMode] = useState(false);
+  const [tags, setTags] = useState([]);
+  const [editTask, setEditTask] = useState(null);
 
-  const [description, setDescription] =
-    useState("");
-
-  const [filter, setFilter] =
-    useState("All");
-
-  const [darkMode, setDarkMode] =
-    useState(false);
-
-  const [tags, setTags] =
-    useState([]);
-
-
-  // DARK MODE
+ 
   useEffect(() => {
-
-    if (darkMode) {
-
-      document.documentElement
-        .classList.add("dark");
-
-    } else {
-
-      document.documentElement
-        .classList.remove("dark");
-    }
-
+    document.documentElement.classList.toggle("dark", darkMode);
   }, [darkMode]);
 
-
-  // FETCH TASKS
   const fetchTasks = async () => {
-
     try {
-
-      const res =
-        await API.get("/tasks");
-
+      const res = await API.get("/tasks");
       setTasks(res.data);
-
-    } catch (error) {
-
-      console.log(error);
+    } catch (err) {
+      console.log(err);
     }
   };
 
-
-  // LOAD TASKS
   useEffect(() => {
-
     fetchTasks();
-
   }, []);
 
-
-  // HANDLE TAGS
   const handleTagChange = (tag) => {
-
-    if (tags.includes(tag)) {
-
-      setTags(
-        tags.filter((t) => t !== tag)
-      );
-
-    } else {
-
-      setTags([...tags, tag]);
-    }
+    setTags((prev) =>
+      prev.includes(tag)
+        ? prev.filter((t) => t !== tag)
+        : [...prev, tag]
+    );
   };
 
-
-  // CREATE TASK
   const createTask = async () => {
+    if (!title.trim()) return alert("Title required");
 
-    if (!title) {
+    const taskData = { title, description, tags };
 
-      alert("Title is required");
-
-      return;
+    if (editTask) {
+      await API.put(`/tasks/${editTask._id}`, taskData);
+      setEditTask(null);
+    } else {
+      await API.post("/tasks", taskData);
     }
 
-    try {
-
-      await API.post("/tasks", {
-
-        title,
-        description,
-        tags
-      });
-
-      setTitle("");
-      setDescription("");
-      setTags([]);
-
-      fetchTasks();
-
-    } catch (error) {
-
-      console.log(error);
-    }
+    setTitle("");
+    setDescription("");
+    setTags([]);
+    fetchTasks();
   };
 
+  const editTaskHandler = (task) => {
+    setEditTask(task);
+    setTitle(task.title);
+    setDescription(task.description);
+    setTags(task.tags || []);
+  };
 
-  // DELETE TASK
+  const cancelEdit = () => {
+  setEditTask(null);
+  setTitle("");
+  setDescription("");
+  setTags([]);
+};
+
   const deleteTask = async (id) => {
-
-    try {
-
-      await API.delete(`/tasks/${id}`);
-
-      fetchTasks();
-
-    } catch (error) {
-
-      console.log(error);
-    }
+    await API.delete(`/tasks/${id}`);
+    fetchTasks();
   };
 
-
-  // TOGGLE STATUS
   const toggleStatus = async (task) => {
-
-    try {
-
-      await API.put(
-
-        `/tasks/${task._id}`,
-
-        {
-          status:
-            task.status === "Pending"
-              ? "Completed"
-              : "Pending"
-        }
-      );
-
-      fetchTasks();
-
-    } catch (error) {
-
-      console.log(error);
-    }
+    await API.put(`/tasks/${task._id}`, {
+      status: task.status === "Pending" ? "Completed" : "Pending",
+    });
+    fetchTasks();
   };
 
-
-  // LOGOUT
   const logout = () => {
-
     localStorage.removeItem("token");
-
     window.location.href = "/";
   };
 
-
   return (
-
     <div className="dashboard">
 
-      {/* HEADER */}
-      <div className="header">
+      <div className="navbar">
+        <div className="navbar-left">
+          <img src="/task_icon.png" className="navbar-icon" />
+          <h1 className="navbar-title">Task Manager</h1>
+        </div>
 
-        <h1 className="title">
-          <img
-    src="/task_icon.png"
-    alt="task"
-    className="task-image"
-  />
-  
-  Task Manager Dashboard
-        </h1>
-
-        <div className="header-actions">
-
-          <button
-            onClick={() =>
-              setDarkMode(!darkMode)
-            }
-            className="btn theme-btn"
-          >
-            {darkMode
-              ? "☀️ Light"
-              : "🌙 Dark"}
+        <div className="navbar-right">
+          <button onClick={() => setDarkMode(!darkMode)} className="btn theme-btn">
+            {darkMode ? "☀️ Light" : "🌙 Dark"}
           </button>
 
-          <button
-            onClick={logout}
-            className="btn logout-btn"
-          >
+          <button onClick={logout} className="btn logout-btn">
             Logout
           </button>
-
         </div>
-
       </div>
 
 
-      {/* CREATE TASK */}
       <div className="card">
+        <h2 className="create-task-title">Create Task</h2>
 
-        <h2 className="Create_task">Create New Task</h2>
-
-        {/* TITLE */}
         <input
-          type="text"
-          placeholder="Enter task title..."
           className="task-input"
           value={title}
-          onChange={(e) =>
-            setTitle(e.target.value)
-          }
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Title"
         />
 
-        {/* DESCRIPTION */}
         <textarea
-          placeholder="Enter task description..."
           className="task-description"
           value={description}
-          onChange={(e) =>
-            setDescription(e.target.value)
-          }
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Description"
         />
 
-        {/* CHECKBOX TAGS */}
+     
         <div className="checklist">
-
-          <label>
-            <input
-              type="checkbox"
-              checked={tags.includes(
-                "Important"
-              )}
-              onChange={() =>
-                handleTagChange(
-                  "Important"
-                )
-              }
-            />
-            Important
-          </label>
-
-          <label>
-            <input
-              type="checkbox"
-              checked={tags.includes(
-                "Personal"
-              )}
-              onChange={() =>
-                handleTagChange(
-                  "Personal"
-                )
-              }
-            />
-            Personal
-          </label>
-
-          <label>
-            <input
-              type="checkbox"
-              checked={tags.includes(
-                "Work"
-              )}
-              onChange={() =>
-                handleTagChange("Work")
-              }
-            />
-            Work
-          </label>
-
+          {["Work", "Personal", "Important"].map((tag) => (
+            <label key={tag}>
+              <input
+                type="checkbox"
+                checked={tags.includes(tag)}
+                onChange={() => handleTagChange(tag)}
+              />
+              {tag}
+            </label>
+          ))}
         </div>
 
-        {/* BUTTON */}
-        <button
-          onClick={createTask}
-          className="btn add-btn"
-        >
-          Add Task
-        </button>
+       <div className="task-actions">
+  <button onClick={createTask} className="btn add-btn">
+    {editTask ? "Update Task" : "Add Task"}
+  </button>
 
+  {editTask && (
+    <button onClick={cancelEdit} className="btn cancel-btn">
+      Cancel
+    </button>
+  )}
+</div>
       </div>
 
-
-      {/* FILTER BUTTONS */}
+ 
       <div className="filters">
-
-        <button
-          onClick={() =>
-            setFilter("All")
-          }
-          className={`btn filter-btn
-          ${filter === "All"
-              ? "active"
-              : ""}
-          `}
-        >
-          All
-        </button>
-
-        <button
-          onClick={() =>
-            setFilter("Pending")
-          }
-          className={`btn filter-btn
-          ${filter === "Pending"
-              ? "active"
-              : ""}
-          `}
-        >
-          Pending
-        </button>
-
-        <button
-          onClick={() =>
-            setFilter("Completed")
-          }
-          className={`btn filter-btn
-          ${filter === "Completed"
-              ? "active"
-              : ""}
-          `}
-        >
-          Completed
-        </button>
-
+        {["All", "Pending", "Completed"].map((f) => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`btn filter-btn ${filter === f ? "active" : ""}`}
+          >
+            {f}
+          </button>
+        ))}
       </div>
 
-
-      {/* TASK LIST */}
-      <div className="grid">
-
+  
+      <div className="task-grid">
         {tasks
-          .filter((task) => {
-
-            if (filter === "All")
-              return true;
-
-            return task.status === filter;
-          })
+          .filter((t) => (filter === "All" ? true : t.status === filter))
           .map((task) => (
-
             <div
               key={task._id}
-              className="card task-card"
+              className={`task-card ${
+                task.status === "Completed"
+                  ? "completed-card"
+                  : "pending-card"
+              }`}
             >
+              <div className="task-header">
+                <h2 className="task-title">{task.title}</h2>
 
-              <h2>{task.title}</h2>
-
-              <p className="description">
-                {task.description}
-              </p>
-
-
-              {/* TAGS */}
-              <div className="tags">
-
-                {task.tags?.map(
-                  (tag, index) => (
-
-                    <span
-                      key={index}
-                      className="tag"
-                    >
+                <div className="top-tags">
+                  {task.tags?.map((tag, i) => (
+                    <span key={i} className="top-tag">
                       {tag}
                     </span>
-                  )
-                )}
-
+                  ))}
+                </div>
               </div>
 
+              <p className="task-desc">{task.description}</p>
 
-              {/* STATUS */}
-              <p className="status-text">
-
+              <p className="task-status">
                 Status:
-
                 <span
                   className={
-                    task.status ===
-                      "Completed"
-                      ? "done"
-                      : "pending"
+                    task.status === "Completed" ? "done" : "pending"
                   }
                 >
                   {task.status}
                 </span>
-
               </p>
 
-
-              {/* BUTTONS */}
-              <div className="row">
-
+              <div className="task-footer">
                 <button
-                  onClick={() =>
-                    toggleStatus(task)
-                  }
+                  onClick={() => toggleStatus(task)}
                   className="btn toggle-btn"
                 >
-                  {task.status ===
-                    "Pending"
+                  {task.status === "Pending"
                     ? "Mark Complete"
                     : "Move to Pending"}
                 </button>
 
-                <button
-                  onClick={() =>
-                    deleteTask(task._id)
-                  }
-                  className="btn delete-btn"
-                >
-                  Delete
-                </button>
+                <div className="right-actions">
+                  <button
+                    onClick={() => editTaskHandler(task)}
+                    className="btn edit-btn"
+                  >
+                    Edit
+                  </button>
 
+                  <button
+                    onClick={() => deleteTask(task._id)}
+                    className="btn delete-btn"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-
             </div>
           ))}
-
       </div>
-
     </div>
   );
 }
