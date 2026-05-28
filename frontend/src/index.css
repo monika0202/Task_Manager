@@ -261,6 +261,10 @@ body {
   color: var(--text);
   border-radius: 999px;
   font-weight: 600;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;   
+  margin-top: 6px;
 }
 
 

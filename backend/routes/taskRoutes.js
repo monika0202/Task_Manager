@@ -15,7 +15,7 @@ const {
 } = require("../controllers/taskController");
 
 
-// Protected Routes
+
 
 router.get("/", protect, getTasks);
 

@@ -6,27 +6,22 @@ const taskSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-
-    description: {
-      type: String,
-    },
+    description: String,
 
     status: {
       type: String,
-      enum: ["Pending", "Completed"],
       default: "Pending",
     },
 
-    // ✅ ADD THIS
-    tags: [
-      {
-        type: String,
-      },
-    ],
+ 
+    tags: [String],
+
+    dueDate: Date,
 
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
   },
   { timestamps: true }
