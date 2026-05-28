@@ -250,8 +250,11 @@ body {
 .task-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;   
+  gap: 12px;
 }
+
+
 
 .top-tag {
   font-size: 11px;
@@ -267,7 +270,18 @@ body {
   margin-top: 6px;
 }
 
+.top-tags {
+  display: flex;
+  flex-direction: row;  
+  gap: 8px;
+  flex-wrap: wrap;      
+  align-items: center;
+}
 
+.top-tag {
+  display: inline-flex;
+  white-space: nowrap;
+}
 
 
 .add-btn {

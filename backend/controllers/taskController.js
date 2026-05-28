@@ -29,7 +29,7 @@ const createTask = async (req, res) => {
       dueDate,
     } = req.body;
 
-    // VALIDATION
+  
     if (!title || !title.trim()) {
       return res.status(400).json({
         message: "Title is required",
